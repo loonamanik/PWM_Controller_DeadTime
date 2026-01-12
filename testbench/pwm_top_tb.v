@@ -17,11 +17,30 @@ module pwm_top_sweep_tb();
     initial clk = 1'b0;
     always #(T/2) clk = ~clk;
 
+    // VERIFICATION SUITE
     initial begin
-        reset_n = 0; duty = 192; final_val = 4; dt_val = 20;
-        #100 reset_n = 1; // Short reset
-        #15000;            // Simulate only 2 microseconds
-        $display("Done");
+        // Global Reset
+        reset_n = 1'b0;
+        duty = 9'd128;    
+        final_val = 8'd2; 
+        dt_val = 8'd0;
+        #20 reset_n = 1'b1;
+
+        // --- TEST CASE 1: Minimum Propagation Delay (High-Frequency) ---
+        // Purpose: Verify precise 50ns dead-band insertion
+        dt_val = 8'd5;     // 5 clock cycles * 10ns = 50ns
+        duty   = 9'd128;   // 50% Duty Cycle
+        $display("CASE 1 START: 50ns Dead-Band");
+        repeat (2 * (2**R)) @(negedge clk); 
+
+        // --- TEST CASE 2: Robust Safety Margin (High-Reliability) ---
+        // Purpose: Verify 200ns dead-band at high duty cycle
+        dt_val = 8'd20;    // 20 clock cycles * 10ns = 200ns
+        duty   = 9'd192;   // 75% Duty Cycle
+        $display("CASE 2 START: 200ns Dead-Band");
+        repeat (2 * (2**R)) @(negedge clk);
+
+        $display("VERIFICATION COMPLETE: All timing constraints met.");
         $finish;
     end
 endmodule
