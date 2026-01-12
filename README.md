@@ -6,9 +6,12 @@ This repository features a high-fidelity Pulse Width Modulation (PWM) controller
 ## Technical Specifications
 * **Architecture:** Fully synchronous RTL design with registered output stages.
 * **Synchronization:** Input buffering to mitigate metastable states and combinational race conditions.
-* **Resolution:** Parametric bit-width for duty cycle ($R$) and timer frequency ($TIMER\_BITS$).
+* **Resolution:** Parametric bit-width for duty cycle ($R$) and timer frequency ($TIMER_BITS$).
 * **Safety Logic:** Hardware-level enforcement of dead-time intervals across all duty cycle variations.
 
+## 🏗️ Architecture
+The design follows a modular hierarchy for maximum scalability and timing precision:
+![Architecture Diagram](./waveforms/PWM_architecture.png)
 ## Functional Verification Results
 
 The design was validated using a **Parameter Sweep** strategy. The table below summarizes the timing accuracy across different operational modes.
